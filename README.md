@@ -161,3 +161,25 @@ Build and deploy a React-based single-page application that consumes the Portfol
 - Update this README with your actual deployment links once both projects are live.
 
 Good luck building your portfolio ecosystem!
+
+---
+
+## Local Development
+
+### Backend API
+1. `cd backend`
+2. Copy `.env.example` to `.env` and provide your MongoDB Atlas connection string plus JWT secret.
+3. Install dependencies: `npm install`
+4. Start the development server: `npm run dev`
+5. Run automated tests: `npm test`
+6. Seed sample data (optional): `node src/utils/seed.js`
+
+### Front-End SPA
+1. `cd frontend`
+2. Copy `.env.example` to `.env` and set `VITE_API_BASE_URL` to your deployed (or local) API URL.
+3. Install dependencies: `npm install`
+4. Start the Vite dev server: `npm run dev`
+5. Execute UI tests: `npm test`
+6. Build production assets: `npm run build`
+
+The `frontend` app expects the backend to be reachable at the configured API URL for all CRUD operations.
