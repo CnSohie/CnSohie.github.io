@@ -11,37 +11,37 @@ def run_demo(memory_size: int) -> None:
     strategies = [FirstFitStrategy(), BestFitStrategy(), WorstFitStrategy(), NextFitStrategy()]
     experiment_manager = ExperimentManager(memory_size)
 
-    print(f"Running demo with memory size {memory_size} KB and sample workload...")
+    print(f"演示模式：内存 {memory_size} KB，运行示例作业负载……")
     results = experiment_manager.compare_strategies(strategies, jobs)
     for result in results:
         print(result.as_row())
 
-    # Show one step-by-step allocation using First Fit
-    print("\nStep-by-step First Fit allocation:")
+    # 使用首次适应策略逐步展示分配过程
+    print("\n首次适应策略的逐步分配：")
     manager = MemoryManager(memory_size, FirstFitStrategy())
     for job in jobs:
         success = manager.allocate(job)
-        status = "SUCCESS" if success else "FAILED"
-        print(f"Job {job.id} ({job.required_size} KB): {status}")
+        status = "成功" if success else "失败"
+        print(f"作业 {job.id} ({job.required_size} KB): {status}")
         for idx, part in enumerate(manager.partitions_view()):
-            label = "Free" if part.is_free else f"Allocated to {part.job_id}"
-            print(f"  [{idx}] Start: {part.start} KB, Size: {part.size} KB, {label}")
+            label = "空闲" if part.is_free else f"已分配给 {part.job_id}"
+            print(f"  [{idx}] 起始: {part.start} KB, 大小: {part.size} KB, {label}")
         print("---")
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Dynamic partition allocation simulator")
+    parser = argparse.ArgumentParser(description="动态分区分配模拟器")
     parser.add_argument(
         "--mode",
         choices=["console", "demo"],
         default="demo",
-        help="console: interactive simulator; demo: run sample workload",
+        help="console: 交互式模拟器；demo: 运行示例负载",
     )
     parser.add_argument(
         "--memory",
         type=int,
         default=512,
-        help="Total memory size in KB (default: 512)",
+        help="总内存大小（KB，默认 512）",
     )
     return parser.parse_args()
 

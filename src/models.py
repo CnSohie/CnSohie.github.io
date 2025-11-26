@@ -4,7 +4,7 @@ from typing import List, Optional
 
 def _require_positive(value: int, name: str) -> int:
     if value <= 0:
-        raise ValueError(f"{name} must be positive")
+        raise ValueError(f"{name} 必须为正值")
     return value
 
 
@@ -43,9 +43,9 @@ class ExperimentResult:
     def as_row(self) -> str:
         util_percent = f"{self.utilization * 100:.1f}%"
         return (
-            f"{self.strategy:10} | Allocated: {self.allocated_jobs:2d} | "
-            f"Failed: {self.failed_jobs:2d} | Free blocks: {self.free_partitions:2d} | "
-            f"Fragmentation: {self.external_fragmentation:4d} KB | Utilization: {util_percent}"
+            f"{self.strategy:10} | 成功分配: {self.allocated_jobs:2d} | "
+            f"失败: {self.failed_jobs:2d} | 空闲分区: {self.free_partitions:2d} | "
+            f"外部碎片: {self.external_fragmentation:4d} KB | 利用率: {util_percent}"
         )
 
 

@@ -41,9 +41,9 @@ class ExperimentManager:
     def format_partitions(partitions: List[Partition]) -> str:
         lines = []
         for idx, part in enumerate(sorted(partitions, key=lambda p: p.start)):
-            status = "Free" if part.is_free else f"Allocated to {part.job_id}"
+            status = "空闲" if part.is_free else f"已分配给 {part.job_id}"
             lines.append(
-                f"[{idx}] Start: {part.start} KB, Size: {part.size} KB, {status}"
+                f"[{idx}] 起始: {part.start} KB, 大小: {part.size} KB, {status}"
             )
         return "\n".join(lines)
 

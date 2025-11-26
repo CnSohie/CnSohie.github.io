@@ -1,16 +1,16 @@
-# Dynamic Partition Allocation Simulation
+# 动态分区分配仿真系统
 
-This repository implements a console-based simulator for dynamic partition memory allocation. It models contiguous physical memory, supports multiple allocation strategies (First Fit, Best Fit, Worst Fit, Next Fit), and provides experiment tooling to compare strategies under the same job workload.
+本仓库实现了一个基于控制台的动态分区内存分配模拟器。它模拟连续物理内存，支持多种分配策略（首次适应、最佳适应、最坏适应、循环首次适应），并提供实验工具在同一作业负载下对比各策略表现。
 
-## Features
-- Configurable memory size with partition splitting and coalescing.
-- Allocation and deallocation by job ID.
-- Strategies: First Fit, Best Fit, Worst Fit, and Next Fit.
-- Experiment runner that reports fragmentation, free partition count, and utilization.
-- Interactive console menu and quick demo mode.
+## 功能特点
+- 可配置内存容量，支持分区拆分与合并。
+- 通过作业 ID 进行分配与回收。
+- 支持策略：首次适应、最佳适应、最坏适应、循环首次适应。
+- 实验运行器输出碎片、空闲分区数量与利用率等指标。
+- 交互式控制台菜单与快速演示模式。
 
-## Setup
-Requires Python 3.10+.
+## 环境准备
+需要 Python 3.10+。
 
 ```bash
 python -m venv .venv
@@ -18,34 +18,34 @@ source .venv/bin/activate
 pip install --upgrade pip
 ```
 
-## Running
-- **Demo mode (default):** runs a sample workload across all strategies and shows a detailed First Fit trace.
+## 运行方式
+- **演示模式（默认）**：对示例作业在所有策略下运行，并展示首次适应的详细分配过程。
 
 ```bash
 python main.py --memory 512
 ```
 
-- **Interactive console:** allows adding jobs, allocating/deallocating, and comparing algorithms.
+- **交互式控制台**：可添加作业、分配/回收、以及对比算法。
 
 ```bash
 python main.py --mode console --memory 512
 ```
 
-## Repository Structure
-- `main.py`: entry point with demo and CLI launcher.
-- `src/models.py`: data classes for partitions, jobs, and experiment results.
-- `src/strategies.py`: allocation strategies implementing a common interface.
-- `src/memory_manager.py`: core memory operations, partition splitting, and merging.
-- `src/job_manager.py`: in-memory job queue management.
-- `src/experiment.py`: experiment orchestration and statistics.
-- `src/ui.py`: console menu and sample job definitions.
-- `docs/design.md`: full design document, diagrams, and database schema documentation.
+## 目录结构
+- `main.py`：入口脚本，包含演示与 CLI 启动逻辑。
+- `src/models.py`：分区、作业与实验结果的数据模型。
+- `src/strategies.py`：实现统一接口的分配策略。
+- `src/memory_manager.py`：核心内存操作、分区拆分与合并。
+- `src/job_manager.py`：内存中的作业队列管理。
+- `src/experiment.py`：实验编排与统计。
+- `src/ui.py`：控制台菜单与示例作业定义。
+- `docs/design.md`：完整设计文档、图示与数据库方案。
 
-## Example Output (demo)
+## 示例输出（演示模式）
 ```
-Running demo with memory size 512 KB and sample workload...
-FirstFit   | Allocated:  5 | Failed:  0 | Free blocks:  1 | Fragmentation:  2 KB | Utilization: 99.6%
-BestFit    | Allocated:  5 | Failed:  0 | Free blocks:  1 | Fragmentation:  2 KB | Utilization: 99.6%
-WorstFit   | Allocated:  5 | Failed:  0 | Free blocks:  1 | Fragmentation:  2 KB | Utilization: 99.6%
-NextFit    | Allocated:  5 | Failed:  0 | Free blocks:  1 | Fragmentation:  2 KB | Utilization: 99.6%
+演示模式：内存 512 KB，运行示例作业负载……
+FirstFit   | 成功分配:  5 | 失败:  0 | 空闲分区:  1 | 外部碎片:    2 KB | 利用率: 99.6%
+BestFit    | 成功分配:  5 | 失败:  0 | 空闲分区:  1 | 外部碎片:    2 KB | 利用率: 99.6%
+WorstFit   | 成功分配:  5 | 失败:  0 | 空闲分区:  1 | 外部碎片:    2 KB | 利用率: 99.6%
+NextFit    | 成功分配:  5 | 失败:  0 | 空闲分区:  1 | 外部碎片:    2 KB | 利用率: 99.6%
 ```

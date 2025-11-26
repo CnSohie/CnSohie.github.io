@@ -9,7 +9,7 @@ class JobManager:
 
     def add(self, job: Job) -> None:
         if any(existing.id == job.id for existing in self.jobs):
-            raise ValueError(f"Job ID {job.id} already exists")
+            raise ValueError(f"作业 ID {job.id} 已存在")
         self.jobs.append(job)
 
     def get(self, job_id: str) -> Optional[Job]:

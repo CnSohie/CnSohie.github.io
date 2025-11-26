@@ -26,8 +26,7 @@ class MemoryManager:
         target = self.strategy.select_partition(free_parts, job.required_size)
         if target is None:
             print(
-                f"Allocation failed for Job {job.id}: no suitable free partition; "
-                "consider deallocating or merging." 
+                f"作业 {job.id} 分配失败：没有合适的空闲分区，建议先回收或合并空闲块。"
             )
             return False
 
@@ -61,7 +60,7 @@ class MemoryManager:
                 part.job_id = None
                 self.merge_free_partitions()
                 return True
-        print(f"No partition found for Job {job_id}.")
+        print(f"未找到作业 {job_id} 对应的分区。")
         return False
 
     def merge_free_partitions(self) -> None:

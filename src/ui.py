@@ -25,34 +25,34 @@ def create_strategy(choice: str) -> AllocationStrategy:
 
 def sample_jobs() -> List[Job]:
     return [
-        Job("J1", "Compiler", 120),
-        Job("J2", "Renderer", 200),
-        Job("J3", "Analytics", 60),
-        Job("J4", "Logger", 80),
-        Job("J5", "TestRunner", 50),
+        Job("J1", "编译器", 120),
+        Job("J2", "渲染器", 200),
+        Job("J3", "分析服务", 60),
+        Job("J4", "日志记录", 80),
+        Job("J5", "测试执行", 50),
     ]
 
 
 def prompt_job() -> Job:
-    job_id = input("Job ID: ").strip()
-    name = input("Job name: ").strip() or job_id
-    size = int(input("Required size (KB): ").strip())
-    arrival = input("Arrival time (optional, int): ").strip()
+    job_id = input("作业 ID: ").strip()
+    name = input("作业名称: ").strip() or job_id
+    size = int(input("需求大小 (KB): ").strip())
+    arrival = input("到达时间（可选，整数）: ").strip()
     arrival_time = int(arrival) if arrival else None
     return Job(job_id, name, size, arrival_time)
 
 
 def display_partitions(manager: MemoryManager) -> None:
-    print("Current partitions:")
+    print("当前分区状态：")
     for idx, part in enumerate(manager.partitions_view()):
-        status = "Free" if part.is_free else f"Allocated to {part.job_id}"
-        print(f"[{idx}] Start: {part.start} KB, Size: {part.size} KB, {status}")
+        status = "空闲" if part.is_free else f"已分配给 {part.job_id}"
+        print(f"[{idx}] 起始: {part.start} KB, 大小: {part.size} KB, {status}")
 
 
 def allocation_menu() -> str:
-    print("Select allocation algorithm:")
-    print("1) First Fit  2) Best Fit  3) Worst Fit  4) Next Fit")
-    return input("Choice: ").strip()
+    print("选择分配算法：")
+    print("1) 首次适应  2) 最佳适应  3) 最坏适应  4) 循环首次适应")
+    return input("输入选项: ").strip()
 
 
 def run_console(memory_size: int = 512) -> None:
@@ -63,62 +63,62 @@ def run_console(memory_size: int = 512) -> None:
     experiment_manager = ExperimentManager(memory_size)
 
     actions = {
-        "1": "Add job",
-        "2": "View job queue",
-        "3": "Allocate next job",
-        "4": "Deallocate job by ID",
-        "5": "Show partitions",
-        "6": "Load sample workload",
-        "7": "Compare algorithms on current queue",
-        "8": "Exit",
+        "1": "添加作业",
+        "2": "查看作业队列",
+        "3": "分配下一个作业",
+        "4": "按 ID 回收作业",
+        "5": "显示分区",
+        "6": "加载示例负载",
+        "7": "比较当前队列的算法",
+        "8": "退出",
     }
 
     while True:
-        print("\n=== Dynamic Partition Simulator ===")
+        print("\n=== 动态分区分配模拟器 ===")
         for key, label in actions.items():
             print(f"{key}) {label}")
-        choice = input("Select action: ").strip()
+        choice = input("请选择操作: ").strip()
 
         if choice == "1":
             try:
                 job_manager.add(prompt_job())
-                print("Job added.")
+                print("作业已添加。")
             except ValueError as exc:
-                print(f"Error: {exc}")
+                print(f"错误: {exc}")
         elif choice == "2":
-            print("Pending jobs:")
+            print("待分配作业：")
             for job in job_manager.pending():
                 print(f"- {job.id} ({job.name}): {job.required_size} KB")
         elif choice == "3":
             if not job_manager.pending():
-                print("No jobs pending.")
+                print("当前无待分配作业。")
                 continue
             strategy_choice = allocation_menu()
             strategy = create_strategy(strategy_choice)
             memory_manager.set_strategy(strategy)
             job = job_manager.pop_next()
             if job and memory_manager.allocate(job):
-                print(f"Allocated {job.id} using {strategy.name}.")
+                print(f"已使用 {strategy.name} 分配作业 {job.id}。")
             display_partitions(memory_manager)
         elif choice == "4":
-            job_id = input("Job ID to deallocate: ").strip()
+            job_id = input("要回收的作业 ID: ").strip()
             memory_manager.deallocate(job_id)
             display_partitions(memory_manager)
         elif choice == "5":
             display_partitions(memory_manager)
             frag, blocks = memory_manager.free_statistics()
-            print(f"Free blocks: {blocks}, External fragmentation: {frag} KB")
+            print(f"空闲分区数: {blocks}, 外部碎片: {frag} KB")
         elif choice == "6":
             for job in sample_jobs():
                 try:
                     job_manager.add(job)
                 except ValueError:
                     pass
-            print("Loaded sample workload.")
+            print("已加载示例负载。")
         elif choice == "7":
             jobs = job_manager.pending()
             if not jobs:
-                print("No jobs to compare; add or load workload first.")
+                print("没有可比较的作业，请先添加或加载负载。")
                 continue
             strategies = [
                 FirstFitStrategy(),
@@ -127,12 +127,12 @@ def run_console(memory_size: int = 512) -> None:
                 NextFitStrategy(),
             ]
             results = experiment_manager.compare_strategies(strategies, jobs)
-            print("\nStrategy comparison (identical workload):")
+            print("\n策略对比（相同作业队列）：")
             for result in results:
                 print(result.as_row())
         elif choice == "8":
-            print("Exiting simulator.")
+            print("退出模拟器。")
             break
         else:
-            print("Invalid option.")
+            print("无效的选项。")
 
